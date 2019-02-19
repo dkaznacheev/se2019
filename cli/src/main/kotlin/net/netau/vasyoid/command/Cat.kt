@@ -1,5 +1,6 @@
 package net.netau.vasyoid.command
 
+import net.netau.vasyoid.VariablesStorage
 import java.io.*
 
 /**
@@ -18,9 +19,16 @@ class Cat(
         if (arguments.isEmpty()) {
             cat(stdin)
         }
+        val basePath = VariablesStorage.get("PWD")
         return try {
-            arguments.forEach {
-                cat(FileInputStream(File(it)).bufferedReader())
+            arguments.
+                map {
+                    if (it.startsWith(File.separator))
+                        it
+                    else
+                        basePath + File.separator + it
+                    }
+                .forEach {cat(FileInputStream(File(it)).bufferedReader())
             }
             stdout.flush()
             true

@@ -14,7 +14,7 @@ object Cli {
         tokens = QuotesExpander.expand(tokens)
         tokens = VariablesSubstitutor.substitute(tokens)
         Interpreter.interpret(tokens)
-        print("> ")
+        print("${VariablesStorage.get("PWD")}> ")
     }
 
     /**
@@ -22,7 +22,7 @@ object Cli {
      */
     @JvmStatic
     fun main(args: Array<String>) {
-        print("> ")
+        print("${VariablesStorage.get("PWD")}> ")
         System.`in`.bufferedReader().useLines { lines ->
             lines.forEach { line ->
                 processInput(line)

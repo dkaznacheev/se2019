@@ -5,7 +5,7 @@ package net.netau.vasyoid
  */
 object VariablesStorage {
 
-    private val variables = mutableMapOf<String, String>()
+    private val variables = mutableMapOf<String, String>("PWD" to System.getProperty("user.dir"))
 
     /**
      * Gets the value af a variable or ""

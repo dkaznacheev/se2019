@@ -1,5 +1,6 @@
 package net.netau.vasyoid.command
 
+import net.netau.vasyoid.VariablesStorage
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.File
@@ -14,7 +15,7 @@ class Pwd(
 ) : Command(stdin, arguments, stdout) {
 
     override fun run(): Boolean {
-        stdout.write(File("./").canonicalPath)
+        stdout.write(VariablesStorage.get("PWD"))
         stdout.flush()
         return true
     }
