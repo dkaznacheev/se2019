@@ -15,7 +15,7 @@ class Pwd(
 ) : Command(stdin, arguments, stdout) {
 
     override fun run(): Boolean {
-        stdout.write(VariablesStorage.get("PWD"))
+        stdout.write(VariablesStorage.get("PWD") + System.lineSeparator())
         stdout.flush()
         return true
     }

@@ -1,6 +1,9 @@
 package net.netau.vasyoid.command
 
-import java.io.*
+import net.netau.vasyoid.util.PathUtil.getBasePath
+import java.io.BufferedReader
+import java.io.BufferedWriter
+import java.io.FileInputStream
 import java.nio.charset.Charset
 
 /**
@@ -17,13 +20,18 @@ class Wc(
             printStat(wc(stdin))
         }
         val total = Statistics()
-        arguments.forEach {
-            val stat = wc(FileInputStream(File(it)).reader(Charset.defaultCharset()).buffered())
-            printStat(stat, it)
-            total.lines += stat.lines
-            total.words += stat.words
-            total.bytes += stat.bytes
-        }
+        val basePath = getBasePath()
+
+        arguments
+            .forEach {
+                val stat = wc(
+                    FileInputStream(basePath.resolve(it).toFile())
+                        .reader(Charset.defaultCharset()).buffered())
+                printStat(stat, it)
+                total.lines += stat.lines
+                total.words += stat.words
+                total.bytes += stat.bytes
+            }
         if (arguments.size > 1) {
             printStat(total, "total")
         }

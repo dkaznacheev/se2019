@@ -2,6 +2,7 @@ package net.netau.vasyoid.command
 
 import net.netau.vasyoid.VariablesStorage
 import java.io.*
+import java.nio.file.FileSystems
 
 /**
  * Cat command. Prints the contents of a file.
@@ -19,17 +20,11 @@ class Cat(
         if (arguments.isEmpty()) {
             cat(stdin)
         }
-        val basePath = VariablesStorage.get("PWD")
+        val basePath =  FileSystems.getDefault().getPath(VariablesStorage.get("PWD"))
         return try {
-            arguments.
-                map {
-                    if (it.startsWith(File.separator))
-                        it
-                    else
-                        basePath + File.separator + it
-                    }
-                .forEach {cat(FileInputStream(File(it)).bufferedReader())
-            }
+            arguments
+                .map { basePath.resolve(it).toUri() }
+                .forEach { cat(FileInputStream(File(it)).bufferedReader()) }
             stdout.flush()
             true
         } catch (e: IOException) {

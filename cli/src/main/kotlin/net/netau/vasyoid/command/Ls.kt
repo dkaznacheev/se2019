@@ -1,9 +1,11 @@
 package net.netau.vasyoid.command
 
 import net.netau.vasyoid.VariablesStorage
+import net.netau.vasyoid.util.PathUtil.getBasePath
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.File
+import java.nio.file.FileSystems
 
 /**
  * Ls command. Lists all files in specified directory or in current if unspecified.
@@ -14,22 +16,27 @@ class Ls(
     stdout: BufferedWriter
 ) : Command(stdin, arguments, stdout) {
     override fun run(): Boolean {
-        val baseDir = VariablesStorage.get("PWD")
+        val basePath = getBasePath()
         val path =
             if (arguments.isEmpty())
-                baseDir
+                basePath
             else {
-                val relativePath = arguments.first()
-                if (relativePath.startsWith(File.separator))
-                    relativePath
-                else
-                    baseDir + File.separator + relativePath
+                basePath.resolve(arguments.first())
             }
 
-        val directory = File(path)
-        if (!directory.exists() or !directory.isDirectory)
+        val file = path.toFile()
+
+        if (!file.exists()) {
+            println("ls: ${file.canonicalPath} does not exist")
             return false
-        stdout.write(listDirectory(directory))
+        }
+
+        if (!file.isDirectory) {
+            println("ls: ${file.canonicalPath} is not a directory")
+            return false
+        }
+
+        stdout.write(listDirectory(file))
         stdout.flush()
         return true
     }

@@ -1,9 +1,9 @@
 package net.netau.vasyoid.command
 
 import net.netau.vasyoid.VariablesStorage
+import net.netau.vasyoid.util.PathUtil.getBasePath
 import java.io.BufferedReader
 import java.io.BufferedWriter
-import java.io.File
 
 /**
  * Cd command. Moves to specified path or to root if path was not defined.
@@ -19,22 +19,21 @@ class Cd(
             return true
         }
 
-        val basePath = VariablesStorage.get("PWD")
+        val basePath = getBasePath()
 
-        var path = arguments.first()
+        val file = basePath.resolve(arguments.first()).toFile()
 
-        path =
-            if (path.startsWith(File.separator))
-                path
-            else basePath + File.separator + path
+        if (!file.exists()) {
+            println("cd: ${file.canonicalPath} does not exist")
+            return false
+        }
 
-        val file = File(path)
-        if (!file.exists() or !file.isDirectory) {
+        if (!file.isDirectory) {
+            println("cd: ${file.canonicalPath} is not a directory")
             return false
         }
 
         VariablesStorage.set("PWD", file.canonicalPath)
         return true
     }
-
 }

@@ -1,5 +1,6 @@
 package net.netau.vasyoid.command
 
+import net.netau.vasyoid.util.PathUtil.getBasePath
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.IOException
@@ -18,7 +19,7 @@ class ExternalCommand(
         return try {
             val process = Runtime
                 .getRuntime()
-                .exec(prefix + arguments.joinToString(" "))
+                .exec(prefix + arguments.joinToString(" "), null, getBasePath().toFile())
             writeInput(process)
             readOutput(process)
             readErrors(process)
