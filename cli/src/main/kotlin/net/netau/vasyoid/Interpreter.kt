@@ -68,8 +68,25 @@ object Interpreter {
             "echo" -> Echo(input, arguments, output).run()
             "wc" -> Wc(input, arguments, output).run()
             "pwd" -> Pwd(input, arguments, output).run()
-            "cd" -> Cd(input, arguments, output).run()
-            "ls" -> Ls(input, arguments, output).run()
+            "cd", "ls" -> {
+                try {
+                    if (command == "cd") {
+                        Cd(input, arguments, output).run()
+                    } else {
+                        Ls(input, arguments, output).run()
+                    }
+                } catch (e: Throwable) {
+                    when(e) {
+                        is NoSuchFileException -> output.write(
+                            "${e.command}: ${e.file} does not exist")
+                        is NotADirectoryException -> output.write(
+                            "${e.command}: ${e.file} is not a directory")
+                        is IncorrectArgumentNumberException -> output.write(
+                            "${e.command}: expected ${e.expected} arguments, got ${e.actual}")
+                    }
+                    false
+                }
+            }
             "exit" -> {
                 System.exit(0)
                 true

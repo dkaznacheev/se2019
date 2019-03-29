@@ -1,5 +1,8 @@
 package net.netau.vasyoid.command
 
+import net.netau.vasyoid.IncorrectArgumentNumberException
+import net.netau.vasyoid.NoSuchFileException
+import net.netau.vasyoid.NotADirectoryException
 import net.netau.vasyoid.VariablesStorage
 import net.netau.vasyoid.util.PathUtil.getBasePath
 import java.io.BufferedReader
@@ -19,18 +22,20 @@ class Cd(
             return true
         }
 
+        if (arguments.size > 1) {
+            throw IncorrectArgumentNumberException("cd", 1, arguments.size)
+        }
+
         val basePath = getBasePath()
 
         val file = basePath.resolve(arguments.first()).toFile()
 
         if (!file.exists()) {
-            println("cd: ${file.canonicalPath} does not exist")
-            return false
+            throw NoSuchFileException("cd", file.canonicalPath)
         }
 
         if (!file.isDirectory) {
-            println("cd: ${file.canonicalPath} is not a directory")
-            return false
+            throw NotADirectoryException("cd", file.canonicalPath)
         }
 
         VariablesStorage.set("PWD", file.canonicalPath)

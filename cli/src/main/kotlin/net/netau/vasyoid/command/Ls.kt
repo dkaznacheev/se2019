@@ -1,5 +1,8 @@
 package net.netau.vasyoid.command
 
+import net.netau.vasyoid.IncorrectArgumentNumberException
+import net.netau.vasyoid.NoSuchFileException
+import net.netau.vasyoid.NotADirectoryException
 import net.netau.vasyoid.VariablesStorage
 import net.netau.vasyoid.util.PathUtil.getBasePath
 import java.io.BufferedReader
@@ -24,16 +27,19 @@ class Ls(
                 basePath.resolve(arguments.first())
             }
 
+        if (arguments.size > 1) {
+            throw IncorrectArgumentNumberException("ls", 1, arguments.size)
+        }
+
         val file = path.toFile()
 
+
         if (!file.exists()) {
-            println("ls: ${file.canonicalPath} does not exist")
-            return false
+            throw NoSuchFileException("cd", file.canonicalPath)
         }
 
         if (!file.isDirectory) {
-            println("ls: ${file.canonicalPath} is not a directory")
-            return false
+            throw NotADirectoryException("cd", file.canonicalPath)
         }
 
         stdout.write(listDirectory(file))

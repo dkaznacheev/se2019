@@ -21,6 +21,6 @@ class PwdTest {
         val outputStream = ByteArrayOutputStream()
         assertTrue(Pwd(System.`in`.bufferedReader(), arguments, outputStream.bufferedWriter()).run())
         val outputString = String(ByteArrayInputStream(outputStream.toByteArray()).readBytes())
-        assertEquals(File("./").canonicalPath, outputString)
+        assertEquals(File("./").canonicalPath + System.lineSeparator(), outputString)
     }
 }
