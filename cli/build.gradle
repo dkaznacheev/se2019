@@ -1,0 +1,30 @@
+plugins {
+    id 'application'
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.11'
+}
+
+application {
+    mainClassName = "net.netau.vasyoid.Cli"
+}
+
+group 'se2018'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}

@@ -1,0 +1,1 @@
+[![Build Status](https://travis-ci.com/vasyoid/se2019.svg)](https://travis-ci.com/vasyoid/se2019)
