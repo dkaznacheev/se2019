@@ -18,7 +18,7 @@ class Cd(
 ) : Command(stdin, arguments, stdout) {
     override fun run(): Boolean {
         if (arguments.isEmpty()) {
-            VariablesStorage.set("PWD", System.getProperty("user.dir"))
+            VariablesStorage.set("PWD", System.getProperty("user.home"))
             return true
         }
 

@@ -63,7 +63,12 @@ object Interpreter {
             return false
         }
         return when (command) {
-            "=" -> Assign(input, arguments, output).run()
+            "=" -> try {
+                Assign(input, arguments, output).run()
+            } catch (e: SystemVariableAssignmentException) {
+                output.write("can't assign value to reserved variable")
+                false
+            }
             "cat" -> Cat(input, arguments, output).run()
             "echo" -> Echo(input, arguments, output).run()
             "wc" -> Wc(input, arguments, output).run()
